@@ -5,7 +5,9 @@ function App() {
  
   return (
     <>
-      <div>App</div>
+      <div>
+        <h1 className="text-3xl font-bold text-blue-700 p-6">Tailwind works</h1>
+      </div>
     </>
   )
 }
