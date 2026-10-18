@@ -14,3 +14,13 @@
   --color-secondary: oklch(0.54615 0.21521 262.881);
   --color-accent: oklch(0.59597 0.12742 163.225);
 }
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
