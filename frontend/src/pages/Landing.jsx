@@ -4,6 +4,7 @@ import Hero from "../components/landing/Hero";
 import WhyChoose from "../components/landing/WhyChoose";
 import Features from "../components/landing/Features";
 import HowItWorks from "../components/landing/HowItWorks";
+import Footer from "../components/landing/Footer";
 
 const Landing = () => {
   return (
@@ -13,11 +14,7 @@ const Landing = () => {
       <WhyChoose />
       <Features />
       <HowItWorks />
-
-      {/* temporary, the footer replaces this in the next step */}
-      <section id="contact" className="bg-surface p-10 text-2xl">
-        Contact / footer section
-      </section>
+      <Footer />
     </>
   );
 };
