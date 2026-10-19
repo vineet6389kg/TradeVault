@@ -25,7 +25,10 @@ const RecentTrades = ({ trades }) => {
     <div className="rounded-2xl border border-border bg-white p-5">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-lg font-bold text-fg">Recent trades</h2>
-        <Link to="/trades" className="text-sm font-semibold text-primary hover:underline">
+        <Link
+          to="/trades"
+          className="text-sm font-semibold text-primary hover:underline"
+        >
           View all
         </Link>
       </div>
@@ -44,14 +47,20 @@ const RecentTrades = ({ trades }) => {
           <tbody>
             {trades.map((t) => (
               <tr key={t._id} className="border-b border-border last:border-0">
-                <td className="px-3 py-3 text-muted">{formatDate(t.tradeDate)}</td>
+                <td className="px-3 py-3 text-muted">
+                  {formatDate(t.tradeDate)}
+                </td>
                 <td className="px-3 py-3 font-bold text-fg">{t.pair}</td>
                 <td className="px-3 py-3">{t.side}</td>
                 <td className="px-3 py-3">1 : {t.rr}</td>
-                <td className="px-3 py-3 text-muted">-</td>
+                <td className="px-3 py-3 text-muted">
+                  {t.strategy?.name || "-"}
+                </td>
                 <td
                   className={`px-3 py-3 font-bold ${
-                    t.pnl < 0 ? "text-loss" : t.pnl > 0 ? "text-profit" : "text-fg"
+                    t.pnl < 0 ? "text-loss"
+                    : t.pnl > 0 ? "text-profit"
+                    : "text-fg"
                   }`}
                 >
                   {formatMoney(t.pnl)}
