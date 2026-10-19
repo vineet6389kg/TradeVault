@@ -6,6 +6,7 @@ const headings = [
   "Date",
   "Pair",
   "Side",
+  "Strategy",
   "Entry",
   "Exit",
   "RR",
@@ -19,7 +20,7 @@ const TradeTable = ({ trades, onEdit, onDelete }) => {
   return (
     // overflow-x-auto: the table scrolls sideways on small screens
     <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-      <table className="w-full min-w-[840px] text-left text-sm">
+      <table className="w-full min-w-[960px] text-left text-sm">
         <thead>
           <tr className="border-b border-border text-muted">
             {headings.map((heading, i) => (
@@ -50,6 +51,10 @@ const TradeTable = ({ trades, onEdit, onDelete }) => {
                 >
                   {t.side}
                 </span>
+              </td>
+
+              <td className="px-4 py-3 text-fg">
+                {t.strategy?.name || <span className="text-muted">-</span>}
               </td>
 
               <td className="px-4 py-3">{t.entry}</td>
