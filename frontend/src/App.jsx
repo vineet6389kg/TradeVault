@@ -3,16 +3,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Trades from "./pages/Trades";
+import RiskManagement from "./pages/RiskManagement";
+import Strategies from "./pages/Strategies";
+import Psychology from "./pages/Psychology";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        {/* shows the toast pop-ups */}
         <Toaster position="top-right" />
 
         <Routes>
@@ -21,9 +26,16 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* private pages: only for logged-in users */}
+          {/* private pages: logged in only, shown inside the sidebar layout */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/trades" element={<Trades />} />
+              <Route path="/risk" element={<RiskManagement />} />
+              <Route path="/strategies" element={<Strategies />} />
+              <Route path="/psychology" element={<Psychology />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>
