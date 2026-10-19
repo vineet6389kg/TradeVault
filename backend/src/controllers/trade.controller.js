@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Trade from "../models/Trade.js";
 import Strategy from "../models/Strategy.js";
 import { uploadImage, deleteImage } from "../services/cloudinary.service.js";
+import Psychology from "../models/Psychology.js";
 
 // fields the user is allowed to send (rr and user are never accepted from the body)
 const allowedFields = [
@@ -69,7 +70,10 @@ export const createTrade = async (req, res) => {
     let image = {};
     if (req.file) {
       const result = await uploadImage(req.file.buffer);
-      image = { screenshotUrl: result.secure_url, screenshotId: result.public_id };
+      image = {
+        screenshotUrl: result.secure_url,
+        screenshotId: result.public_id,
+      };
     }
 
     const trade = await Trade.create({
@@ -194,6 +198,14 @@ export const deleteTrade = async (req, res) => {
 
     // remove the screenshot from Cloudinary too
     await deleteImage(trade.screenshotId);
+
+    // journal entries stay, they just lose the link to the deleted trade
+    await Psychology.updateMany(
+      { user: req.user._id, trade: trade._id },
+      { $set: { trade: null } },
+    );
+
+    res.json({ message: "Trade deleted" });
 
     res.json({ message: "Trade deleted" });
   } catch (error) {
