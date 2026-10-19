@@ -39,6 +39,11 @@ const tradeSchema = new mongoose.Schema(
     },
     notes: { type: String, trim: true, default: "" },
     tradeDate: { type: Date, default: Date.now },
+    tradeDate: { type: Date, default: Date.now },
+
+    // screenshot stored on Cloudinary
+    screenshotUrl: { type: String, default: "" },
+    screenshotId: { type: String, default: "" }, // needed to delete the image later
 
     // these are added in later steps:
     // screenshotUrl (Cloudinary), strategy, aiReview (Gemini)
