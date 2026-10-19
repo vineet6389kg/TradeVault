@@ -7,13 +7,18 @@ import {
   deleteTrade,
 } from "../controllers/trade.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
+import { uploadScreenshot } from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
-// every trade route needs a login
 router.use(protect);
 
-router.route("/").get(getTrades).post(createTrade);
-router.route("/:id").get(getTrade).put(updateTrade).delete(deleteTrade);
+// uploadScreenshot runs before the controller and reads the file
+router.route("/").get(getTrades).post(uploadScreenshot, createTrade);
+router
+  .route("/:id")
+  .get(getTrade)
+  .put(uploadScreenshot, updateTrade)
+  .delete(deleteTrade);
 
 export default router;
