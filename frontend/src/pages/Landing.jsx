@@ -1,18 +1,18 @@
 import React from "react";
 import Navbar from "../components/landing/Navbar";
 import Hero from "../components/landing/Hero";
+import WhyChoose from "../components/landing/WhyChoose";
 import Features from "../components/landing/Features";
 import HowItWorks from "../components/landing/HowItWorks";
-import TechStack from "../components/landing/TechStack";
 
 const Landing = () => {
   return (
     <>
       <Navbar />
       <Hero />
+      <WhyChoose />
       <Features />
       <HowItWorks />
-      <TechStack />
 
       {/* temporary, the footer replaces this in the next step */}
       <section id="contact" className="bg-surface p-10 text-2xl">
