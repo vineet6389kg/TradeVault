@@ -20,7 +20,8 @@ export const getDashboard = async (req, res) => {
 
     const recentTrades = await Trade.find({ user: req.user._id })
       .sort("-tradeDate")
-      .limit(5);
+      .limit(5)
+      .populate("strategy", "name");
 
     // a new user has no trades, so stats is undefined and we send zeros
     res.json({
