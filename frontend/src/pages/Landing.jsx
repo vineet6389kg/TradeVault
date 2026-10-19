@@ -1,10 +1,13 @@
 import React from "react";
 import Navbar from "../components/landing/Navbar";
+import Hero from "../components/landing/Hero";
 
 const Landing = () => {
   return (
     <>
       <Navbar />
+      <Hero />
+
       <section id="features" className="h-screen p-10 text-2xl">Features section</section>
       <section id="how" className="h-screen bg-surface p-10 text-2xl">How it works section</section>
       <section id="stack" className="h-screen p-10 text-2xl">Tech stack section</section>
