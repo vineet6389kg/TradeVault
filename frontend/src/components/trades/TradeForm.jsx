@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
@@ -43,6 +43,7 @@ const fields = [
   "emotion",
   "notes",
   "tradeDate",
+  "strategy",
 ];
 
 // trade = null means "add", a trade object means "edit"
@@ -50,16 +51,32 @@ const TradeForm = ({ trade, onSaved, onClose }) => {
   // the screenshot choice: a new file, or "remove the old one"
   const [screenshot, setScreenshot] = useState({ file: null, remove: false });
 
+  // null until the strategies are loaded
+  const [strategies, setStrategies] = useState(null);
+
+  useEffect(() => {
+    api
+      .get("/strategies")
+      .then((res) => setStrategies(res.data))
+      .catch(() => setStrategies([])); // the form still works without strategies
+  }, []);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: trade
-      ? { ...trade, tradeDate: trade.tradeDate.slice(0, 10) }
+      ? {
+          ...trade,
+          tradeDate: trade.tradeDate.slice(0, 10),
+          // the list sends the strategy as an object, the dropdown needs its id
+          strategy: trade.strategy?._id || "",
+        }
       : {
           side: "Buy",
           emotion: "Calm",
+          strategy: "",
           tradeDate: new Date().toISOString().slice(0, 10),
         },
   });
@@ -187,13 +204,33 @@ const TradeForm = ({ trade, onSaved, onClose }) => {
         </Field>
       </div>
 
-      <Field label="How did you feel?">
-        <select className={inputClass} {...register("emotion")}>
-          {emotions.map((e) => (
-            <option key={e}>{e}</option>
-          ))}
-        </select>
-      </Field>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Strategy used">
+          {/* rendered after loading, so the saved strategy is selected correctly */}
+          {strategies === null ? (
+            <select disabled className={inputClass}>
+              <option>Loading...</option>
+            </select>
+          ) : (
+            <select className={inputClass} {...register("strategy")}>
+              <option value="">No strategy</option>
+              {strategies.map((s) => (
+                <option key={s._id} value={s._id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </Field>
+
+        <Field label="How did you feel?">
+          <select className={inputClass} {...register("emotion")}>
+            {emotions.map((e) => (
+              <option key={e}>{e}</option>
+            ))}
+          </select>
+        </Field>
+      </div>
 
       <Field label="Notes">
         <textarea
