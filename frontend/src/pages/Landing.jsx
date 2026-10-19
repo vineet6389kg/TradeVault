@@ -1,17 +1,23 @@
 import React from "react";
 import Navbar from "../components/landing/Navbar";
 import Hero from "../components/landing/Hero";
+import Features from "../components/landing/Features";
+import HowItWorks from "../components/landing/HowItWorks";
+import TechStack from "../components/landing/TechStack";
 
 const Landing = () => {
   return (
     <>
       <Navbar />
       <Hero />
+      <Features />
+      <HowItWorks />
+      <TechStack />
 
-      <section id="features" className="h-screen p-10 text-2xl">Features section</section>
-      <section id="how" className="h-screen bg-surface p-10 text-2xl">How it works section</section>
-      <section id="stack" className="h-screen p-10 text-2xl">Tech stack section</section>
-      <section id="contact" className="h-screen bg-surface p-10 text-2xl">Contact section</section>
+      {/* temporary, the footer replaces this in the next step */}
+      <section id="contact" className="bg-surface p-10 text-2xl">
+        Contact / footer section
+      </section>
     </>
   );
 };
