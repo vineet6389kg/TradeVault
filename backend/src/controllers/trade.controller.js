@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Trade from "../models/Trade.js";
+import Strategy from "../models/Strategy.js";
 import { uploadImage, deleteImage } from "../services/cloudinary.service.js";
 
 // fields the user is allowed to send (rr and user are never accepted from the body)
@@ -16,6 +17,7 @@ const allowedFields = [
   "emotion",
   "notes",
   "tradeDate",
+  "strategy",
 ];
 
 const pickFields = (body) => {
@@ -23,7 +25,16 @@ const pickFields = (body) => {
   allowedFields.forEach((field) => {
     if (body[field] !== undefined) data[field] = body[field];
   });
+  // FormData sends "" when no strategy is chosen, which means "no strategy"
+  if (data.strategy === "") data.strategy = null;
   return data;
+};
+
+// returns true if the strategy exists and belongs to this user (or no strategy was given)
+const strategyIsValid = async (strategyId, userId) => {
+  if (!strategyId) return true;
+  if (!mongoose.isValidObjectId(strategyId)) return false;
+  return !!(await Strategy.exists({ _id: strategyId, user: userId }));
 };
 
 // risk reward = reward distance divided by risk distance
@@ -45,10 +56,14 @@ const handleError = (res, error) => {
   res.status(500).json({ message: error.message });
 };
 
-// POST /api/trades (JSON or form-data with a "screenshot" file)
+// POST /api/trades (form-data, with an optional "screenshot" file)
 export const createTrade = async (req, res) => {
   try {
     const data = pickFields(req.body);
+
+    if (!(await strategyIsValid(data.strategy, req.user._id))) {
+      return res.status(400).json({ message: "Strategy not found" });
+    }
 
     // upload the screenshot first, if there is one
     let image = {};
@@ -91,7 +106,10 @@ export const getTrades = async (req, res) => {
     const sortOptions = ["tradeDate", "-tradeDate", "pnl", "-pnl", "rr", "-rr"];
     const sortBy = sortOptions.includes(sort) ? sort : "-tradeDate";
 
-    const trades = await Trade.find(filter).sort(sortBy);
+    // populate replaces the strategy id with { _id, name }
+    const trades = await Trade.find(filter)
+      .sort(sortBy)
+      .populate("strategy", "name");
     res.json(trades);
   } catch (error) {
     handleError(res, error);
@@ -108,7 +126,7 @@ export const getTrade = async (req, res) => {
     const trade = await Trade.findOne({
       _id: req.params.id,
       user: req.user._id,
-    });
+    }).populate("strategy", "name");
 
     if (!trade) return res.status(404).json({ message: "Trade not found" });
     res.json(trade);
@@ -130,7 +148,13 @@ export const updateTrade = async (req, res) => {
     });
     if (!trade) return res.status(404).json({ message: "Trade not found" });
 
-    trade.set(pickFields(req.body));
+    const data = pickFields(req.body);
+
+    if (!(await strategyIsValid(data.strategy, req.user._id))) {
+      return res.status(400).json({ message: "Strategy not found" });
+    }
+
+    trade.set(data);
     trade.rr = calculateRR(trade.entry, trade.stopLoss, trade.takeProfit);
 
     if (req.file) {
@@ -147,6 +171,7 @@ export const updateTrade = async (req, res) => {
     }
 
     await trade.save();
+    await trade.populate("strategy", "name");
     res.json(trade);
   } catch (error) {
     handleError(res, error);

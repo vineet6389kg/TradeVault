@@ -44,7 +44,14 @@ const tradeSchema = new mongoose.Schema(
     // screenshot stored on Cloudinary
     screenshotUrl: { type: String, default: "" },
     screenshotId: { type: String, default: "" }, // needed to delete the image later
+    screenshotId: { type: String, default: "" },
 
+    // the strategy used for this trade (optional)
+    strategy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Strategy",
+      default: null,
+    },
     // these are added in later steps:
     // screenshotUrl (Cloudinary), strategy, aiReview (Gemini)
   },
