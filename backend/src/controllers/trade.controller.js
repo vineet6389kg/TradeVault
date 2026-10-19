@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Trade from "../models/Trade.js";
+import { uploadImage, deleteImage } from "../services/cloudinary.service.js";
 
 // fields the user is allowed to send (rr and user are never accepted from the body)
 const allowedFields = [
@@ -17,7 +18,6 @@ const allowedFields = [
   "tradeDate",
 ];
 
-// copies only the allowed fields from the request body
 const pickFields = (body) => {
   const data = {};
   allowedFields.forEach((field) => {
@@ -33,10 +33,8 @@ const calculateRR = (entry, stopLoss, takeProfit) => {
   return +(Math.abs(takeProfit - entry) / risk).toFixed(2);
 };
 
-// makes search text safe, so characters like "." or "(" cannot break the search
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-// sends a clean error message to the frontend
 const handleError = (res, error) => {
   if (error.name === "ValidationError") {
     const message = Object.values(error.errors)
@@ -47,13 +45,21 @@ const handleError = (res, error) => {
   res.status(500).json({ message: error.message });
 };
 
-// POST /api/trades
+// POST /api/trades (JSON or form-data with a "screenshot" file)
 export const createTrade = async (req, res) => {
   try {
     const data = pickFields(req.body);
 
+    // upload the screenshot first, if there is one
+    let image = {};
+    if (req.file) {
+      const result = await uploadImage(req.file.buffer);
+      image = { screenshotUrl: result.secure_url, screenshotId: result.public_id };
+    }
+
     const trade = await Trade.create({
       ...data,
+      ...image,
       rr: calculateRR(
         Number(data.entry),
         Number(data.stopLoss),
@@ -73,7 +79,6 @@ export const getTrades = async (req, res) => {
   try {
     const { search, side, emotion, result, sort } = req.query;
 
-    // always only this user's trades
     const filter = { user: req.user._id };
 
     if (search) filter.pair = { $regex: escapeRegex(search), $options: "i" };
@@ -83,7 +88,6 @@ export const getTrades = async (req, res) => {
     if (result === "loss") filter.pnl = { $lt: 0 };
     if (result === "breakeven") filter.pnl = 0;
 
-    // only allow these sort values
     const sortOptions = ["tradeDate", "-tradeDate", "pnl", "-pnl", "rr", "-rr"];
     const sortBy = sortOptions.includes(sort) ? sort : "-tradeDate";
 
@@ -127,8 +131,20 @@ export const updateTrade = async (req, res) => {
     if (!trade) return res.status(404).json({ message: "Trade not found" });
 
     trade.set(pickFields(req.body));
-    // prices may have changed, so calculate rr again
     trade.rr = calculateRR(trade.entry, trade.stopLoss, trade.takeProfit);
+
+    if (req.file) {
+      // new image: upload it, then delete the old one
+      const result = await uploadImage(req.file.buffer);
+      await deleteImage(trade.screenshotId);
+      trade.screenshotUrl = result.secure_url;
+      trade.screenshotId = result.public_id;
+    } else if (req.body.removeScreenshot === "true") {
+      // the user pressed "Remove"
+      await deleteImage(trade.screenshotId);
+      trade.screenshotUrl = "";
+      trade.screenshotId = "";
+    }
 
     await trade.save();
     res.json(trade);
@@ -150,6 +166,10 @@ export const deleteTrade = async (req, res) => {
     });
 
     if (!trade) return res.status(404).json({ message: "Trade not found" });
+
+    // remove the screenshot from Cloudinary too
+    await deleteImage(trade.screenshotId);
+
     res.json({ message: "Trade deleted" });
   } catch (error) {
     handleError(res, error);
