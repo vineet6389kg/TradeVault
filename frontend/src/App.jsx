@@ -1,15 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
 
-function App() {
- 
+const App = () => {
   return (
-    <>
-      <div>
-        <h1 className="text-3xl font-bold text-blue-700 p-6">Tailwind works</h1>
-      </div>
-    </>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<h1 className="p-10 text-2xl">Login page (coming soon)</h1>} />
+        <Route path="/register" element={<h1 className="p-10 text-2xl">Register page (coming soon)</h1>} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
