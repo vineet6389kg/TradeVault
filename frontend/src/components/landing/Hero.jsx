@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiPlay } from "react-icons/fi";
+import HeroPreview from "./HeroPreview";
 
 const Hero = () => {
   return (
@@ -54,39 +55,7 @@ const Hero = () => {
         </motion.div>
 
         {/* Right side: placeholder card (animated preview comes in next step) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-2xl border border-border bg-white p-6 shadow-xl shadow-primary/10"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-fg">Trade Journal</h3>
-            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-              Preview
-            </span>
-          </div>
-
-          {[
-            ["Pair", "EUR/USD"],
-            ["Side", "Buy"],
-            ["Entry to Exit", "1.0850 to 1.0910"],
-            ["Risk : Reward", "1 : 2.0"],
-          ].map(([label, value]) => (
-            <div
-              key={label}
-              className="flex justify-between border-b border-border py-3 text-sm last:border-0"
-            >
-              <span className="text-muted">{label}</span>
-              <span className="font-medium text-fg">{value}</span>
-            </div>
-          ))}
-
-          <div className="flex justify-between pt-3 text-sm">
-            <span className="text-muted">Profit</span>
-            <span className="font-bold text-accent">+$120</span>
-          </div>
-        </motion.div>
+         <HeroPreview />
       </div>
     </header>
   );
