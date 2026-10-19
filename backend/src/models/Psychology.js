@@ -35,4 +35,5 @@ const psychologySchema = new mongoose.Schema(
 
 const Psychology = mongoose.model("Psychology", psychologySchema);
 
+
 export default Psychology;
