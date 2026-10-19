@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import tradeRoutes from "./routes/trade.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 // load the .env file first
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/api/health", (req, res) => {
 // auth routes: /api/auth/register, /api/auth/login, /api/auth/me
 app.use("/api/auth", authRoutes);
 app.use("/api/trades", tradeRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 5000;
 
