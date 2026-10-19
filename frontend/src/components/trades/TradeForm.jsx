@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
+import ScreenshotUpload from "./ScreenshotUpload";
 
 export const emotions = [
   "Calm",
@@ -28,8 +29,27 @@ const Field = ({ label, error, children }) => (
 // number fields: required, and the value is sent as a number
 const num = (message) => ({ required: message, valueAsNumber: true });
 
+// the fields the backend accepts
+const fields = [
+  "pair",
+  "side",
+  "entry",
+  "exit",
+  "stopLoss",
+  "takeProfit",
+  "lotSize",
+  "riskPercent",
+  "pnl",
+  "emotion",
+  "notes",
+  "tradeDate",
+];
+
 // trade = null means "add", a trade object means "edit"
 const TradeForm = ({ trade, onSaved, onClose }) => {
+  // the screenshot choice: a new file, or "remove the old one"
+  const [screenshot, setScreenshot] = useState({ file: null, remove: false });
+
   const {
     register,
     handleSubmit,
@@ -46,11 +66,25 @@ const TradeForm = ({ trade, onSaved, onClose }) => {
 
   const onSubmit = async (values) => {
     try {
+      // files cannot travel as JSON, so we send FormData
+      const form = new FormData();
+
+      fields.forEach((field) => {
+        const value = values[field];
+        // skip empty number fields (they come back as NaN)
+        if (value !== undefined && value !== null && !Number.isNaN(value)) {
+          form.append(field, value);
+        }
+      });
+
+      if (screenshot.file) form.append("screenshot", screenshot.file);
+      if (screenshot.remove) form.append("removeScreenshot", "true");
+
       if (trade) {
-        await api.put(`/trades/${trade._id}`, values);
+        await api.put(`/trades/${trade._id}`, form);
         toast.success("Trade updated");
       } else {
-        await api.post("/trades", values);
+        await api.post("/trades", form);
         toast.success("Trade added");
       }
       onSaved();
@@ -78,35 +112,78 @@ const TradeForm = ({ trade, onSaved, onClose }) => {
         </Field>
 
         <Field label="Entry price" error={errors.entry}>
-          <input type="number" step="any" className={inputClass} {...register("entry", num("Entry is required"))} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("entry", num("Entry is required"))}
+          />
         </Field>
 
         <Field label="Exit price" error={errors.exit}>
-          <input type="number" step="any" className={inputClass} {...register("exit", num("Exit is required"))} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("exit", num("Exit is required"))}
+          />
         </Field>
 
         <Field label="Stop loss" error={errors.stopLoss}>
-          <input type="number" step="any" className={inputClass} {...register("stopLoss", num("Stop loss is required"))} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("stopLoss", num("Stop loss is required"))}
+          />
         </Field>
 
         <Field label="Take profit" error={errors.takeProfit}>
-          <input type="number" step="any" className={inputClass} {...register("takeProfit", num("Take profit is required"))} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("takeProfit", num("Take profit is required"))}
+          />
         </Field>
 
         <Field label="Lot size">
-          <input type="number" step="any" className={inputClass} {...register("lotSize", { valueAsNumber: true })} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("lotSize", { valueAsNumber: true })}
+          />
         </Field>
 
         <Field label="Risk (%)">
-          <input type="number" step="any" className={inputClass} {...register("riskPercent", { valueAsNumber: true })} />
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            {...register("riskPercent", { valueAsNumber: true })}
+          />
         </Field>
 
-        <Field label="Profit / loss ($), copy it from your broker" error={errors.pnl}>
-          <input type="number" step="any" placeholder="120 or -80" className={inputClass} {...register("pnl", num("Profit / loss is required"))} />
+        <Field
+          label="Profit / loss ($), copy it from your broker"
+          error={errors.pnl}
+        >
+          <input
+            type="number"
+            step="any"
+            placeholder="120 or -80"
+            className={inputClass}
+            {...register("pnl", num("Profit / loss is required"))}
+          />
         </Field>
 
         <Field label="Trade date">
-          <input type="date" className={inputClass} {...register("tradeDate")} />
+          <input
+            type="date"
+            className={inputClass}
+            {...register("tradeDate")}
+          />
         </Field>
       </div>
 
@@ -126,6 +203,12 @@ const TradeForm = ({ trade, onSaved, onClose }) => {
           {...register("notes")}
         />
       </Field>
+
+      {/* screenshot upload with preview */}
+      <ScreenshotUpload
+        existingUrl={trade?.screenshotUrl}
+        onChange={setScreenshot}
+      />
 
       <div className="flex justify-end gap-3 pt-2">
         <button
