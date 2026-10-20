@@ -13,6 +13,7 @@ import RiskManagement from "./pages/RiskManagement";
 import Strategies from "./pages/Strategies";
 import Psychology from "./pages/Psychology";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -37,6 +38,9 @@ const App = () => {
               <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
+
+          {/* any other address */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
