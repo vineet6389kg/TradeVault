@@ -21,10 +21,8 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password must be at least 6 characters"],
       select: false, // password is hidden unless we ask for it
     },
-    avatar: {
-      type: String,
-      default: "",
-    },
+    avatar: { type: String, default: "" },
+    avatarId: { type: String, default: "" }, // Cloudinary id, used to delete the old photo
   },
   { timestamps: true },
 );
