@@ -15,6 +15,7 @@ export const userData = (user) => ({
   name: user.name,
   email: user.email,
   avatar: user.avatar,
+  isDemo: user.email === DEMO_EMAIL,
 });
 
 // POST /api/auth/register
