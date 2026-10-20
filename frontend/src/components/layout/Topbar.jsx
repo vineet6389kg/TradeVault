@@ -1,17 +1,10 @@
 import React from "react";
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
+import Avatar from "../ui/Avatar";
 
 const Topbar = ({ onMenuClick }) => {
   const { user } = useAuth();
-
-  // first letters of the name, like "Aarav Kumar" becomes "AK"
-  const initials = user.name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <header className="sticky top-0 z-20 flex h-[68px] items-center gap-4 border-b border-border bg-white/80 px-5 backdrop-blur-md">
@@ -44,9 +37,7 @@ const Topbar = ({ onMenuClick }) => {
         </button>
 
         <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-sm font-bold text-primary-fg">
-            {initials}
-          </span>
+          <Avatar user={user} size={36} />
           <div className="hidden leading-tight sm:block">
             <p className="text-sm font-semibold text-fg">{user.name}</p>
             <p className="text-xs text-muted">{user.email}</p>
