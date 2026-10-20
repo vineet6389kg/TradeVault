@@ -63,11 +63,19 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // one-click demo account, no password needed
+  const demoLogin = async () => {
+    const { data } = await api.post("/auth/demo");
+    saveSession(data, false);
+  };  
+
   // replaces the saved user after a profile or avatar change
   const updateUser = (updated) => setUser(updated);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, updateUser,demoLogin  }}
+    >
       {children}
     </AuthContext.Provider>
   );
