@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { DEMO_EMAIL } from "../config/demo.js";
 
 // creates the token. "Remember me" keeps the user logged in longer
 const generateToken = (id, rememberMe = false) => {
@@ -72,4 +73,21 @@ export const loginUser = async (req, res) => {
 // GET /api/auth/me (private) returns the logged-in user
 export const getMe = async (req, res) => {
   res.json({ user: userData(req.user) });
+};
+
+// POST /api/auth/demo logs in the shared demo account (no password needed)
+export const demoLogin = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: DEMO_EMAIL });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "The demo account is not set up yet" });
+    }
+
+    res.json({ user: userData(user), token: generateToken(user._id) });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
