@@ -8,6 +8,7 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import strategyRoutes from "./routes/strategy.routes.js";
 import psychologyRoutes from "./routes/psychology.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 // load the .env file first
 dotenv.config();
@@ -30,6 +31,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/strategies", strategyRoutes);
 app.use("/api/psychology", psychologyRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 

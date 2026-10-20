@@ -63,8 +63,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // replaces the saved user after a profile or avatar change
+  const updateUser = (updated) => setUser(updated);
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
