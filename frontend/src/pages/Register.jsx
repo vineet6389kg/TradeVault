@@ -19,7 +19,7 @@ const Register = () => {
   } = useForm();
 
   // already logged in, so skip this page
-  if (user) return <Navigate to="/dashboard" replace />;
+   if (user && !user.isDemo) return <Navigate to="/dashboard" replace />;
 
   const onSubmit = async (values) => {
     try {

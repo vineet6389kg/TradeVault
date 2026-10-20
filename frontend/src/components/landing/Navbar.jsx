@@ -1,7 +1,56 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useAuth } from "../../context/AuthContext";
+
+// the buttons on the right, they change when the user is logged in
+// the same component is used on desktop and inside the mobile menu
+const AuthButtons = ({ onNavigate }) => {
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // wait until we know if the saved login is valid, so the buttons do not flicker
+  if (loading) return null;
+
+  const base =
+    "flex-1 rounded-lg px-4 py-2 text-center font-semibold transition-colors md:flex-none";
+  const outline = `${base} border border-border text-fg hover:bg-surface`;
+  const solid = `${base} bg-primary text-primary-fg hover:bg-primary-hover`;
+
+  // logged in: go to the dashboard, or log out
+  if (user) {
+    return (
+      <>
+        <button
+          onClick={() => {
+            logout();
+            onNavigate?.();
+            navigate("/");
+          }}
+          className={outline}
+        >
+          {user.isDemo ? "Exit demo" : "Log out"}
+        </button>
+        <Link to="/dashboard" onClick={onNavigate} className={solid}>
+          {user.isDemo ? "Back to demo" : "Dashboard"}
+        </Link>
+      </>
+    );
+  }
+
+  // logged out
+  return (
+    <>
+      <Link to="/login" onClick={onNavigate} className={outline}>
+        Log in
+      </Link>
+      <Link to="/register" onClick={onNavigate} className={solid}>
+        Get started
+      </Link>
+    </>
+  );
+};
 
 const Navbar = () => {
   // controls the mobile menu (open / closed)
@@ -10,7 +59,6 @@ const Navbar = () => {
   const links = [
     { label: "Features", href: "#features" },
     { label: "How it works", href: "#how" },
-    { label: "Tech stack", href: "#stack" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -42,18 +90,7 @@ const Navbar = () => {
 
         {/* Desktop buttons (hidden on mobile) */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            to="/login"
-            className="rounded-lg border border-border px-4 py-2 font-semibold text-fg transition-colors hover:bg-surface"
-          >
-            Log in
-          </Link>
-          <Link
-            to="/register"
-            className="rounded-lg bg-primary px-4 py-2 font-semibold text-primary-fg transition-colors hover:bg-primary-hover"
-          >
-            Get started
-          </Link>
+          <AuthButtons />
         </div>
 
         {/* Mobile menu button (hidden on desktop) */}
@@ -89,20 +126,7 @@ const Navbar = () => {
               ))}
 
               <div className="mt-3 flex gap-3">
-                <Link
-                  to="/login"
-                  onClick={() => setOpen(false)}
-                  className="flex-1 rounded-lg border border-border py-2.5 text-center font-semibold"
-                >
-                  Log in
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setOpen(false)}
-                  className="flex-1 rounded-lg bg-primary py-2.5 text-center font-semibold text-primary-fg"
-                >
-                  Get started
-                </Link>
+                <AuthButtons onNavigate={() => setOpen(false)} />
               </div>
             </div>
           </motion.div>

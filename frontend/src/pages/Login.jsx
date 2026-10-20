@@ -18,7 +18,8 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  if (user) return <Navigate to="/dashboard" replace />;
+  // already logged in with a real account, so skip this page (the demo user can still log in)
+  if (user && !user.isDemo) return <Navigate to="/dashboard" replace />;
 
   const onSubmit = async (values) => {
     try {
@@ -37,7 +38,10 @@ const Login = () => {
       footer={
         <>
           New to TradeVault?{" "}
-          <Link to="/register" className="font-semibold text-primary hover:underline">
+          <Link
+            to="/register"
+            className="font-semibold text-primary hover:underline"
+          >
             Create an account
           </Link>
         </>
