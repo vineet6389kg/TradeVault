@@ -1,5 +1,5 @@
 import React from "react";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiZap } from "react-icons/fi";
 import { formatDate, formatMoney } from "../../utils/formatters";
 
 const headings = [
@@ -16,11 +16,11 @@ const headings = [
   "",
 ];
 
-const TradeTable = ({ trades, onEdit, onDelete }) => {
+const TradeTable = ({ trades, onEdit, onDelete, onReview }) => {
   return (
     // overflow-x-auto: the table scrolls sideways on small screens
     <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-      <table className="w-full min-w-[960px] text-left text-sm">
+      <table className="w-full min-w-[1000px] text-left text-sm">
         <thead>
           <tr className="border-b border-border text-muted">
             {headings.map((heading, i) => (
@@ -91,6 +91,16 @@ const TradeTable = ({ trades, onEdit, onDelete }) => {
 
               <td className="px-4 py-3">
                 <div className="flex justify-end gap-1">
+                  {/* blue when this trade already has an AI review */}
+                  <button
+                    onClick={() => onReview(t)}
+                    aria-label={t.aiReview ? "View AI review" : "Analyze with AI"}
+                    className={`rounded-lg p-2 hover:bg-surface ${
+                      t.aiReview ? "text-primary" : "text-muted hover:text-primary"
+                    }`}
+                  >
+                    <FiZap size={16} />
+                  </button>
                   <button
                     onClick={() => onEdit(t)}
                     aria-label="Edit trade"
