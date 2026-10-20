@@ -10,16 +10,24 @@ const Hero = () => {
   const { demoLogin } = useAuth();
   const navigate = useNavigate();
   const [demoLoading, setDemoLoading] = useState(false);
-
   // logs into the demo account and opens the dashboard
   const handleDemo = async () => {
     setDemoLoading(true);
+
+    // if the free server is asleep, tell the visitor why it takes long
+    const slowTimer = setTimeout(() => {
+      toast("Waking up the free server. This can take up to a minute.", {
+        duration: 8000,
+      });
+    }, 5000);
+
     try {
       await demoLogin();
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Could not start the demo");
     } finally {
+      clearTimeout(slowTimer);
       setDemoLoading(false);
     }
   };
