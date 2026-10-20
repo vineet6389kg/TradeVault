@@ -27,11 +27,14 @@ const DashboardLayout = () => {
             <span>You are viewing the demo account with sample data.</span>
             <button
               onClick={() => leaveDemo("/register")}
-              className="font-bold underline"
+              className="rounded-full bg-white px-3 py-1 font-bold text-primary transition-colors hover:bg-white/85"
             >
               Create your free account
             </button>
-            <button onClick={() => leaveDemo("/")} className="underline">
+            <button
+              onClick={() => leaveDemo("/")}
+              className="rounded-full border border-white/50 px-3 py-1 font-medium transition-colors hover:bg-white/15"
+            >
               Exit demo
             </button>
           </div>
