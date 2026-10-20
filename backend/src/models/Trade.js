@@ -1,8 +1,21 @@
 import mongoose from "mongoose";
 
+// the saved AI review, no _id needed because it belongs to one trade
+const aiReviewSchema = new mongoose.Schema(
+  {
+    rating: Number, // discipline rating, 1 to 10
+    summary: String,
+    strengths: [String],
+    mistakes: [String],
+    riskAnalysis: String,
+    suggestions: [String],
+    reviewedAt: Date,
+  },
+  { _id: false },
+);
+
 const tradeSchema = new mongoose.Schema(
   {
-    // which user owns this trade
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -12,7 +25,7 @@ const tradeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Pair is required"],
       trim: true,
-      uppercase: true, // eur/usd is saved as EUR/USD
+      uppercase: true,
     },
     side: {
       type: String,
@@ -39,11 +52,9 @@ const tradeSchema = new mongoose.Schema(
     },
     notes: { type: String, trim: true, default: "" },
     tradeDate: { type: Date, default: Date.now },
-    tradeDate: { type: Date, default: Date.now },
 
     // screenshot stored on Cloudinary
     screenshotUrl: { type: String, default: "" },
-    screenshotId: { type: String, default: "" }, // needed to delete the image later
     screenshotId: { type: String, default: "" },
 
     // the strategy used for this trade (optional)
@@ -52,8 +63,9 @@ const tradeSchema = new mongoose.Schema(
       ref: "Strategy",
       default: null,
     },
-    // these are added in later steps:
-    // screenshotUrl (Cloudinary), strategy, aiReview (Gemini)
+
+    // filled after "Analyze with AI"
+    aiReview: { type: aiReviewSchema, default: null },
   },
   { timestamps: true },
 );
