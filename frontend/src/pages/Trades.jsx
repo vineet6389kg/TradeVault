@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -15,13 +16,26 @@ const Trades = () => {
   const [loading, setLoading] = useState(true); // true only before the first load
   const [reload, setReload] = useState(0); // change this number to fetch again
 
+  // the top bar search puts the text in the URL, like /trades?search=eur
+  const [searchParams] = useSearchParams();
+  const urlSearch = searchParams.get("search") || "";
+
   const [filters, setFilters] = useState({
-    search: "",
+    search: urlSearch,
     side: "",
     result: "",
     emotion: "",
     sort: "-tradeDate",
   });
+
+  // when the top bar search changes the URL, copy it into the filters
+  useEffect(() => {
+    setFilters((current) =>
+      current.search === urlSearch ?
+        current
+      : { ...current, search: urlSearch },
+    );
+  }, [urlSearch]);
 
   // add / edit pop-up: which trade is being edited (null = adding)
   const [modal, setModal] = useState({ open: false, trade: null });
@@ -75,8 +89,12 @@ const Trades = () => {
       {/* Heading and add button */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-fg">Trades</h1>
-          <p className="mt-1 text-muted">Search, filter, and review every trade.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-fg">
+            Trades
+          </h1>
+          <p className="mt-1 text-muted">
+            Search, filter, and review every trade.
+          </p>
         </div>
         <button
           onClick={() => setModal({ open: true, trade: null })}
@@ -98,27 +116,43 @@ const Trades = () => {
           />
         </div>
 
-        <select value={filters.side} onChange={(e) => setFilter("side", e.target.value)} className={selectClass}>
+        <select
+          value={filters.side}
+          onChange={(e) => setFilter("side", e.target.value)}
+          className={selectClass}
+        >
           <option value="">All sides</option>
           <option>Buy</option>
           <option>Sell</option>
         </select>
 
-        <select value={filters.result} onChange={(e) => setFilter("result", e.target.value)} className={selectClass}>
+        <select
+          value={filters.result}
+          onChange={(e) => setFilter("result", e.target.value)}
+          className={selectClass}
+        >
           <option value="">All results</option>
           <option value="win">Wins</option>
           <option value="loss">Losses</option>
           <option value="breakeven">Break even</option>
         </select>
 
-        <select value={filters.emotion} onChange={(e) => setFilter("emotion", e.target.value)} className={selectClass}>
+        <select
+          value={filters.emotion}
+          onChange={(e) => setFilter("emotion", e.target.value)}
+          className={selectClass}
+        >
           <option value="">All emotions</option>
           {emotions.map((e) => (
             <option key={e}>{e}</option>
           ))}
         </select>
 
-        <select value={filters.sort} onChange={(e) => setFilter("sort", e.target.value)} className={selectClass}>
+        <select
+          value={filters.sort}
+          onChange={(e) => setFilter("sort", e.target.value)}
+          className={selectClass}
+        >
           <option value="-tradeDate">Newest first</option>
           <option value="tradeDate">Oldest first</option>
           <option value="-pnl">Highest profit</option>
@@ -129,31 +163,33 @@ const Trades = () => {
 
       {/* Content: loading skeleton, empty state, or the table */}
       <div className="mt-6">
-        {loading ? (
+        {loading ?
           <div className="space-y-3">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="h-14 animate-pulse rounded-xl bg-surface" />
+              <div
+                key={n}
+                className="h-14 animate-pulse rounded-xl bg-surface"
+              />
             ))}
           </div>
-        ) : trades.length === 0 ? (
+        : trades.length === 0 ?
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-12 text-center">
             <p className="font-semibold text-fg">
               {hasFilters ? "No trades match your filters" : "No trades yet"}
             </p>
             <p className="mt-1 text-sm text-muted">
-              {hasFilters
-                ? "Try changing or clearing a filter."
-                : "Add your first trade to start your journal."}
+              {hasFilters ?
+                "Try changing or clearing a filter."
+              : "Add your first trade to start your journal."}
             </p>
           </div>
-        ) : (
-          <TradeTable
+        : <TradeTable
             trades={trades}
             onEdit={(trade) => setModal({ open: true, trade })}
             onDelete={handleDelete}
             onReview={setReviewTrade}
           />
-        )}
+        }
       </div>
 
       {/* Add / edit pop-up. key makes the form reset when you switch trades */}
