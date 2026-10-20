@@ -20,7 +20,7 @@ const TradeTable = ({ trades, onEdit, onDelete, onReview }) => {
   return (
     // overflow-x-auto: the table scrolls sideways on small screens
     <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-      <table className="w-full min-w-[1000px] text-left text-sm">
+      <table className="w-full min-w-[1080px] text-left text-sm">
         <thead>
           <tr className="border-b border-border text-muted">
             {headings.map((heading, i) => (
@@ -90,16 +90,19 @@ const TradeTable = ({ trades, onEdit, onDelete, onReview }) => {
               </td>
 
               <td className="px-4 py-3">
-                <div className="flex justify-end gap-1">
-                  {/* blue when this trade already has an AI review */}
+                <div className="flex items-center justify-end gap-1">
+                  {/* the text is the button's name, title adds a tooltip */}
                   <button
                     onClick={() => onReview(t)}
-                    aria-label={t.aiReview ? "View AI review" : "Analyze with AI"}
-                    className={`rounded-lg p-2 hover:bg-surface ${
-                      t.aiReview ? "text-primary" : "text-muted hover:text-primary"
+                    title={t.aiReview ? "View the saved AI review" : "Analyze this trade with AI"}
+                    className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                      t.aiReview
+                        ? "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
+                        : "border-border text-muted hover:border-primary hover:text-primary"
                     }`}
                   >
-                    <FiZap size={16} />
+                    <FiZap size={14} />
+                    AI review
                   </button>
                   <button
                     onClick={() => onEdit(t)}
