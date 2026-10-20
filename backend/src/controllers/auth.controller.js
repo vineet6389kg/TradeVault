@@ -9,7 +9,7 @@ const generateToken = (id, rememberMe = false) => {
 };
 
 // what we send back to React (never the password)
-const userData = (user) => ({
+export const userData = (user) => ({
   id: user._id,
   name: user.name,
   email: user.email,
@@ -47,7 +47,9 @@ export const loginUser = async (req, res) => {
     const { email, password, rememberMe } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
     // +password because the schema hides it by default
