@@ -5,6 +5,7 @@ import api from "../api/axios";
 import Modal from "../components/ui/Modal";
 import TradeForm, { emotions } from "../components/trades/TradeForm";
 import TradeTable from "../components/trades/TradeTable";
+import AIReviewPanel from "../components/ai/AIReviewPanel";
 
 const selectClass =
   "rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
@@ -22,8 +23,11 @@ const Trades = () => {
     sort: "-tradeDate",
   });
 
-  // modal: open or closed, and which trade is being edited (null = adding)
+  // add / edit pop-up: which trade is being edited (null = adding)
   const [modal, setModal] = useState({ open: false, trade: null });
+
+  // AI review pop-up: the trade being reviewed (null = closed)
+  const [reviewTrade, setReviewTrade] = useState(null);
 
   // fetch trades whenever a filter changes (wait 300ms so we do not call on every key press)
   useEffect(() => {
@@ -41,7 +45,6 @@ const Trades = () => {
     return () => clearTimeout(timer);
   }, [filters, reload]);
 
-  // updates one filter, for example setFilter("side", "Buy")
   const setFilter = (name, value) =>
     setFilters((current) => ({ ...current, [name]: value }));
 
@@ -64,7 +67,8 @@ const Trades = () => {
     }
   };
 
-  const hasFilters = filters.search || filters.side || filters.result || filters.emotion;
+  const hasFilters =
+    filters.search || filters.side || filters.result || filters.emotion;
 
   return (
     <div>
@@ -147,6 +151,7 @@ const Trades = () => {
             trades={trades}
             onEdit={(trade) => setModal({ open: true, trade })}
             onDelete={handleDelete}
+            onReview={setReviewTrade}
           />
         )}
       </div>
@@ -163,6 +168,21 @@ const Trades = () => {
           onSaved={handleSaved}
           onClose={closeModal}
         />
+      </Modal>
+
+      {/* AI review pop-up */}
+      <Modal
+        open={!!reviewTrade}
+        onClose={() => setReviewTrade(null)}
+        title="AI trade review"
+      >
+        {reviewTrade && (
+          <AIReviewPanel
+            key={reviewTrade._id}
+            trade={reviewTrade}
+            onReviewed={() => setReload((n) => n + 1)}
+          />
+        )}
       </Modal>
     </div>
   );
