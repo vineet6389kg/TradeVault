@@ -9,9 +9,9 @@ const upload = multer({
   },
 });
 
-// wraps multer so upload errors come back as clean JSON messages
-export const uploadScreenshot = (req, res, next) => {
-  upload.single("screenshot")(req, res, (error) => {
+// builds a middleware for one file field, with clean JSON error messages
+const handleUpload = (fieldName) => (req, res, next) => {
+  upload.single(fieldName)(req, res, (error) => {
     if (!error) return next();
 
     const message =
@@ -19,3 +19,6 @@ export const uploadScreenshot = (req, res, next) => {
     res.status(400).json({ message });
   });
 };
+
+export const uploadScreenshot = handleUpload("screenshot");
+export const uploadAvatar = handleUpload("avatar");
