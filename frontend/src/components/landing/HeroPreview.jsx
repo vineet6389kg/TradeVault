@@ -8,6 +8,7 @@ import { FiBookOpen, FiZap, FiSliders, FiHeart } from "react-icons/fi";
 const cards = [
   {
     id: "journal",
+    path: "/trades",
     tab: "Journal",
     icon: <FiBookOpen />,
     title: "Trade Journal",
@@ -22,6 +23,7 @@ const cards = [
   },
   {
     id: "ai",
+    path: "/trades",
     tab: "AI Review",
     icon: <FiZap />,
     title: "AI Trade Review",
@@ -35,6 +37,7 @@ const cards = [
   },
   {
     id: "risk",
+    path: "/risk",
     tab: "Risk",
     icon: <FiSliders />,
     title: "Risk Calculator",
@@ -49,6 +52,7 @@ const cards = [
   },
   {
     id: "psychology",
+    path: "/psychology",
     tab: "Psychology",
     icon: <FiHeart />,
     title: "Trading Psychology",
@@ -102,8 +106,8 @@ const HeroPreview = () => {
             exit={{ opacity: 0, x: -40 }}
             transition={{ duration: 0.35 }}
             whileHover={{ y: -4 }}
-            // later this will go to the real feature page
-            onClick={() => navigate("/login")}
+            // logged-out visitors are sent to the login page by ProtectedRoute
+            onClick={() => navigate(card.path)}
             role="button"
             className="cursor-pointer rounded-2xl border border-border bg-white p-6 shadow-xl shadow-primary/10"
           >
@@ -136,9 +140,9 @@ const HeroPreview = () => {
             key={item.id}
             onClick={() => setIndex(i)}
             className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
-              i === index
-                ? "border-primary bg-primary text-primary-fg"
-                : "border-border bg-white text-muted hover:bg-surface"
+              i === index ?
+                "border-primary bg-primary text-primary-fg"
+              : "border-border bg-white text-muted hover:bg-surface"
             }`}
           >
             {item.icon}
