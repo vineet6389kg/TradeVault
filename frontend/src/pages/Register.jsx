@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import AuthLayout from "../layouts/AuthLayout";
+import PasswordInput from "../components/ui/PasswordInput";
 import { useAuth } from "../context/AuthContext";
 
 const inputClass =
@@ -18,8 +19,8 @@ const Register = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // already logged in, so skip this page
-   if (user && !user.isDemo) return <Navigate to="/dashboard" replace />;
+  // already logged in with a real account, so skip this page (the demo user can still register)
+  if (user && !user.isDemo) return <Navigate to="/dashboard" replace />;
 
   const onSubmit = async (values) => {
     try {
@@ -73,10 +74,9 @@ const Register = () => {
 
         <div>
           <label className="text-sm font-medium text-fg">Password</label>
-          <input
-            type="password"
+          <PasswordInput
             placeholder="At least 6 characters"
-            className={inputClass}
+            autoComplete="new-password"
             {...register("password", {
               required: "Password is required",
               minLength: { value: 6, message: "At least 6 characters" },

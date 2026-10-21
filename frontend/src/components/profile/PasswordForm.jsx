@@ -2,9 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
-
-const inputClass =
-  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-fg outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20";
+import PasswordInput from "../ui/PasswordInput";
 
 const PasswordForm = () => {
   const {
@@ -38,10 +36,8 @@ const PasswordForm = () => {
       <div className="mt-4 space-y-4">
         <div>
           <label className="text-sm font-medium text-fg">Current password</label>
-          <input
-            type="password"
+          <PasswordInput
             autoComplete="current-password"
-            className={inputClass}
             {...register("currentPassword", {
               required: "Enter your current password",
             })}
@@ -54,10 +50,8 @@ const PasswordForm = () => {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="text-sm font-medium text-fg">New password</label>
-            <input
-              type="password"
+            <PasswordInput
               autoComplete="new-password"
-              className={inputClass}
               {...register("newPassword", {
                 required: "Enter a new password",
                 minLength: { value: 6, message: "At least 6 characters" },
@@ -70,10 +64,8 @@ const PasswordForm = () => {
 
           <div>
             <label className="text-sm font-medium text-fg">Confirm new password</label>
-            <input
-              type="password"
+            <PasswordInput
               autoComplete="new-password"
-              className={inputClass}
               {...register("confirmPassword", {
                 required: "Confirm your new password",
                 // compares with what was typed in the "new password" box

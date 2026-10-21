@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import AuthLayout from "../layouts/AuthLayout";
+import PasswordInput from "../components/ui/PasswordInput";
 import { useAuth } from "../context/AuthContext";
 
 const inputClass =
@@ -38,10 +39,7 @@ const Login = () => {
       footer={
         <>
           New to TradeVault?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-primary hover:underline"
-          >
+          <Link to="/register" className="font-semibold text-primary hover:underline">
             Create an account
           </Link>
         </>
@@ -63,10 +61,9 @@ const Login = () => {
 
         <div>
           <label className="text-sm font-medium text-fg">Password</label>
-          <input
-            type="password"
+          <PasswordInput
             placeholder="Your password"
-            className={inputClass}
+            autoComplete="current-password"
             {...register("password", { required: "Password is required" })}
           />
           {errors.password && (

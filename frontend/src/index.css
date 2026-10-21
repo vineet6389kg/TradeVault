@@ -39,3 +39,9 @@ body {
     cursor: not-allowed;
   }
 }
+
+/* Microsoft Edge adds its own reveal button, we use our own */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
