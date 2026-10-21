@@ -1,6 +1,6 @@
 # TradeVault AI
 
-**An AI-powered trading journal.** Log trades, plan risk, track your psychology, and get Gemini feedback on every trade.
+**An AI-powered SaaS trading journal.** Log trades, plan risk, track your psychology, and get Gemini feedback on every trade.
 
 ### [TradeVault Demo](https://trade-vault-taupe.vercel.app)
 
@@ -15,9 +15,8 @@ No sign up needed: click **Live Demo** on the landing page to open an account fi
 
 ## Why I built this
 
-I'm a third-year Computer Science student (5th semester) and a forex trader. I also follow the Indian market, but forex is what I trade and keep learning. As a student I trade with a small account, so I can't afford to repeat the same mistakes.
+I'm a third-year Computer Science student (5th semester) interested in software engineering and financial markets. While learning about trading, I realized I needed a better way to record my trades, analyze risk, and improve my decision-making. I built TradeVault AI to solve that problem while gaining hands-on experience building a full-stack SaaS application.
 
-While trading, I saw that I needed a better way to record my trades, check my risk, and understand my own behavior. I think other beginner traders face the same problem, so I decided to build the tool myself.
 
 TradeVault AI is the result. It is a **journal, not a trading platform**: it never connects to a broker or handles real money. It was also my way to build a full product end to end, with authentication, data modeling, file uploads, an AI API, and deployment.
 
@@ -39,7 +38,7 @@ TradeVault AI is the result. It is a **journal, not a trading platform**: it nev
 |---|---|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![AI review](docs/screenshots/ai-review.png) |
 
-| Risk calculators | Strategyy |
+| Risk calculators | Strategy |
 |---|---|
 | ![Risk](docs/screenshots/risk.png) | ![Strategy](docs/screenshots/strategy.png) |
 
@@ -224,13 +223,20 @@ Set the backend `CLIENT_URL` to the Vercel address (with `https`, and no trailin
 
 ---
 
-## Limitations and next steps
+##  Future Improvements
 
-- Login tokens live in the browser and can't be revoked, so changing a password doesn't log out other devices. Moving to httpOnly cookies is the next security step.
-- Profit and loss is entered by the trader, because brokers calculate it differently for forex, gold, and other instruments.
-- The journal works for any instrument, but the risk calculators assume forex-style pips. Calculators for Indian equities and options are a possible next step.
-- AI feedback is for learning only and is not financial advice.
-- **Planned:** analytics charts (equity curve, win rate by strategy), pagination, request validation with Zod, and a weekly AI report across many trades.
+TradeVault AI is actively evolving. Some features I plan to add in future releases include:
+
+ -  **Dream Board** to visualize financial goals and stay motivated throughout the trading journey.
+-  **Weekly Trading Calendar** for planning trades, reviewing performance, and maintaining consistency.
+-  **Advanced Analytics Dashboard** with equity curves, monthly performance, strategy-wise win rates, and detailed trading insights.
+-  **Weekly AI Trading Reports** that summarize performance, identify recurring mistakes, and suggest areas for improvement.
+-  **Pagination & Advanced Filtering** for efficiently managing large trading journals.
+-  **Request Validation with Zod** for stronger backend validation and improved API reliability.
+- **Enhanced Authentication** using httpOnly cookies, refresh tokens, and improved session management.
+-  **Additional Risk Calculators** for Indian equities, futures, options, and other asset classes.
+-  **Progressive Web App (PWA)** support with an improved mobile experience and offline capabilities.
+- **Export Reports** to PDF and CSV for journaling, analytics, and performance tracking.
 
 ## Author
 
