@@ -8,17 +8,17 @@ const Footer = () => {
     {
       label: "GitHub",
       icon: <FiGithub size={20} />,
-      href: "",
+      href: "https://github.com/vineet6389kg",
     },
     {
       label: "LinkedIn",
       icon: <FiLinkedin size={20} />,
-      href: "",
+      href: "https://www.linkedin.com/in/vineet-kumar-046373329/",
     },
     {
       label: "Email",
       icon: <FiMail size={20} />,
-      href: "",
+      href: "vineetkumar9336j@gmail.com",
     },
   ];
 
