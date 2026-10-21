@@ -2,11 +2,10 @@
 
 **An AI-powered trading journal.** Log trades, plan risk, track your psychology, and get Gemini feedback on every trade.
 
-### [Live demo](https://trade-vault-taupe.vercel.app)
+### [TradeVault Demo](https://trade-vault-taupe.vercel.app)
 
 No sign up needed: click **Live Demo** on the landing page to open an account filled with sample data.
 
-![TradeVault AI demo](docs/demo.gif)
 
 **Built with:** React · Node.js · Express · MongoDB · JWT · Cloudinary · Google Gemini · Tailwind CSS · Framer Motion
 
@@ -140,7 +139,7 @@ You need Node 20 or newer, a free [MongoDB Atlas](https://www.mongodb.com/atlas)
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
-cd YOUR-REPO
+cd https://github.com/vineet6389kg/TradeVault
 ```
 
 **Backend**
@@ -235,4 +234,4 @@ Set the backend `CLIENT_URL` to the Vercel address (with `https`, and no trailin
 
 ## Author
 
-Built by **YOUR NAME**, a third-year CSE student · [GitHub](https://github.com/YOUR-USERNAME) · [LinkedIn](https://linkedin.com/in/YOUR-USERNAME)
+Built by **Vineet Kumar**, a third-year CSE student · [https://github.com/vineet6389kg](https://github.com/YOUR-USERNAME) · [https://www.linkedin.com/in/vineet-kumar-046373329/](https://linkedin.com/in/YOUR-USERNAME)
