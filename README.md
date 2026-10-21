@@ -39,6 +39,10 @@ TradeVault AI is the result. It is a **journal, not a trading platform**: it nev
 |---|---|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![AI review](docs/screenshots/ai-review.png) |
 
+| Strategy | All Trades |
+|---|---|
+| ![Strategy](docs/screenshots/strategy.png) | ![All Trades](docs/screenshots/trades.png) |
+
 | Risk calculators | Psychology journal |
 |---|---|
 | ![Risk](docs/screenshots/risk.png) | ![Psychology](docs/screenshots/psychology.png) |
