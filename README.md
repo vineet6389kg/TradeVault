@@ -2,6 +2,8 @@
 
 **An AI-powered SaaS trading journal.** Log trades, plan risk, track your psychology, and get Gemini feedback on every trade.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-2F81F7?style=for-the-badge&logo=vercel&logoColor=white)](https://trade-vault-taupe.vercel.app)
+
 ### [TradeVault Demo](https://trade-vault-taupe.vercel.app)
 
 No sign up needed: click **Live Demo** on the landing page to open an account filled with sample data.
